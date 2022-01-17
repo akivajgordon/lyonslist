@@ -18,26 +18,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchEl = document.querySelector('#search')
   const itemsEl = document.querySelector('#items')
 
-  const renderItems = (query) => {
+  const renderListItems = (query) => {
     const foundItems = fuzzy({
       haystack: items.sort(alphabeticAscending),
       needle: query,
       decorate: true,
     })
 
-    if (!foundItems.length) {
-      itemsEl.innerHTML = `<p>No matches :(</p>`
-      return
-    }
-
-    itemsEl.innerHTML = foundItems.map((item) => `<li>${item}</li>`).join('')
+    itemsEl.innerHTML = foundItems.length
+      ? foundItems.map((item) => `<li>${item}</li>`).join('')
+      : `<p>No matches :(</p>`
   }
 
   searchEl.addEventListener('input', (e) => {
-    renderItems(e.target.value)
+    renderListItems(e.target.value)
   })
 
-  renderItems('')
+  renderListItems('')
 })
 
 const decorateString = ({ string, atIndexes, withDecoration }) => {
