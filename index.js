@@ -11,44 +11,30 @@ const items = [
   'Slim fit car seats',
 ]
 
+const alphabeticAscending = (item, other) =>
+  item.toLowerCase().localeCompare(other.toLowerCase())
+
 document.addEventListener('DOMContentLoaded', () => {
   const searchEl = document.querySelector('#search')
   const itemsEl = document.querySelector('#items')
 
   const renderItems = (query) => {
-    const isEmptyQuery = (query || '').length === 0
-    const foundItems = isEmptyQuery
-      ? items
-          .sort((item, other) =>
-            item.toLowerCase().localeCompare(other.toLowerCase())
-          )
-          .map((i) => ({ item: i }))
-      : fuzzy(items, query)
+    const foundItems = fuzzy({
+      haystack: items.sort(alphabeticAscending),
+      needle: query,
+      decorate: true,
+    })
 
     if (!foundItems.length) {
       itemsEl.innerHTML = `<p>No matches :(</p>`
       return
     }
 
-    itemsEl.innerHTML = foundItems
-      .map(
-        ({ item, match }) =>
-          `<li>${
-            isEmptyQuery
-              ? item
-              : decorateString({
-                  string: item,
-                  atIndexes: match.indexes,
-                  withDecoration: strongify,
-                })
-          }</li>`
-      )
-      .join('')
+    itemsEl.innerHTML = foundItems.map((item) => `<li>${item}</li>`).join('')
   }
 
   searchEl.addEventListener('input', (e) => {
-    const query = e.target.value
-    renderItems(query)
+    renderItems(e.target.value)
   })
 
   renderItems('')
@@ -127,19 +113,28 @@ const bestMatch = (needle, getSearchTerms) => (candidate) => {
   }
 }
 
-const fuzzy = (haystack, needle, getSearchTerms = (x) => [x]) =>
-  haystack
-    .map(bestMatch(needle, getSearchTerms))
-    .filter(({ score }) => isFinite(score))
-    .sort((match, other) => {
-      const matchScore = match.score
-      const otherScore = other.score
+const fuzzy = ({ haystack, needle, getSearchTerms = (x) => [x] }) =>
+  (needle || '').length
+    ? haystack
+        .map(bestMatch(needle, getSearchTerms))
+        .filter(({ score }) => isFinite(score))
+        .sort((match, other) => {
+          const matchScore = match.score
+          const otherScore = other.score
 
-      const scoreDiff = matchScore - otherScore
+          const scoreDiff = matchScore - otherScore
 
-      if (scoreDiff === 0) {
-        return match.match.indexes[0] - other.match.indexes[0]
-      }
+          if (scoreDiff === 0) {
+            return match.match.indexes[0] - other.match.indexes[0]
+          }
 
-      return scoreDiff
-    })
+          return scoreDiff
+        })
+        .map(({ item, match }) =>
+          decorateString({
+            string: item,
+            atIndexes: match.indexes,
+            withDecoration: strongify,
+          })
+        )
+    : haystack
