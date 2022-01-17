@@ -1,4 +1,15 @@
-const items = ['Booster seat']
+const items = [
+  'Booster seat',
+  'Impact driver',
+  'Kettle',
+  'Star tool that comes with a Ring',
+  'Land survey company recommendation',
+  'Barley',
+  'Brandy',
+  'Air mattress',
+  'Hand truck',
+  'Slim fit car seats',
+]
 
 document.addEventListener('DOMContentLoaded', () => {
   const searchEl = document.querySelector('#search')
