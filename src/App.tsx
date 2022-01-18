@@ -1,6 +1,6 @@
 import React, { useState, createContext, useContext } from 'react'
 import fuzzy from './fuzzy'
-
+// comment to kick github pages
 const items = [
   'Air mattress',
   'Banana bread',
