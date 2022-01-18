@@ -2,16 +2,16 @@ import React, { useState, createContext, useContext } from 'react'
 import fuzzy from './fuzzy'
 
 const items = [
+  'Air mattress',
+  'Barley',
   'Booster seat',
+  'Brandy',
+  'Hand truck',
   'Impact driver',
   'Kettle',
-  'Star tool that comes with a Ring',
   'Land survey company recommendation',
-  'Barley',
-  'Brandy',
-  'Air mattress',
-  'Hand truck',
   'Slim fit car seats',
+  'Star tool that comes with a Ring',
 ]
 
 const services = ['Notary public']
