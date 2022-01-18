@@ -11,8 +11,6 @@ const items = [
   'Chicken soup net bags',
   'Child water bottle',
   'Cooler bag',
-  'Dentist recommendation',
-  'Electrician recommendation',
   'Ethernet cable',
   'Fax machine',
   'Flour (all-purpose and bread)',
@@ -22,19 +20,14 @@ const items = [
   'Impact driver',
   'JKHA Handbook',
   'Kettle',
-  'Key copy recommendation',
-  'Land survey company recommendation',
   'Monkey wrench',
   'Non-dairy (soy) milk',
   'Olive oil',
   'Pack n play',
   'Pareve chocolate chips',
-  'Pediatrician recommendation',
   'Pipe wrench',
-  'Plumber recommendation',
   'Power cord for old-school Norelco shaver',
   'Printer',
-  'Printer recommendation',
   'Referee shirt',
   'Ricotta cheese',
   'Rosemary',
@@ -44,12 +37,24 @@ const items = [
   'Star tool that comes with a Ring',
   'Toothpicks',
   'Umbrella stroller',
-  'Willlingness to pilot test a survey for people with kids ages 6-10 who attend day camp',
   'Vegatable oil',
   'Yeast',
 ]
 
-const services = ['Notary public']
+const services = [
+  'Notary public',
+  'Willingness to pilot test a survey for people with kids ages 6-10 who attend day camp',
+]
+
+const recommendations = [
+  'Dentist',
+  'Electrician',
+  'Key copy',
+  'Land survey company',
+  'Pediatrician',
+  'Plumber',
+  'Printer',
+]
 
 const alphabeticAscending = (item: string, other: string) =>
   item.toLowerCase().localeCompare(other.toLowerCase())
@@ -116,6 +121,7 @@ function App() {
 
       <ListSection title="Items" items={items} />
       <ListSection title="Skills and Services" items={services} />
+      <ListSection title="Recommendations" items={recommendations} />
     </SearchContext.Provider>
   )
 }
