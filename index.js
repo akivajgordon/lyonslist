@@ -11,30 +11,45 @@ const items = [
   'Slim fit car seats',
 ]
 
+const services = ['Notary public']
+
 const alphabeticAscending = (item, other) =>
   item.toLowerCase().localeCompare(other.toLowerCase())
 
 document.addEventListener('DOMContentLoaded', () => {
   const searchEl = document.querySelector('#search')
-  const itemsEl = document.querySelector('#items')
 
-  const renderListItems = (query) => {
+  const renderSearchList = ({ container, items, query }) => {
     const foundItems = fuzzy({
       haystack: items.sort(alphabeticAscending),
       needle: query,
       decorate: true,
     })
 
-    itemsEl.innerHTML = foundItems.length
+    container.innerHTML = foundItems.length
       ? foundItems.map((item) => `<li>${item}</li>`).join('')
       : `<p>No matches :(</p>`
   }
 
-  searchEl.addEventListener('input', (e) => {
-    renderListItems(e.target.value)
+  const render = () => {
+    const query = searchEl.value
+    ;[
+      { id: 'items', items },
+      { id: 'services', items: services },
+    ].forEach(({ id, items }) => {
+      renderSearchList({
+        container: document.querySelector(`#${id}`),
+        items,
+        query,
+      })
+    })
+  }
+
+  searchEl.addEventListener('input', () => {
+    render()
   })
 
-  renderListItems('')
+  render()
 })
 
 const decorateString = ({ string, atIndexes, withDecoration }) => {
