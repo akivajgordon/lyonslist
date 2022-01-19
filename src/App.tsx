@@ -1,6 +1,6 @@
-import React, { useState, createContext, useContext } from 'react'
-import fuzzy from './fuzzy'
-// comment to kick github pages
+import React, { useState, createContext, ReactNode } from 'react'
+import fuzzy, { FuzzyResult } from './fuzzy'
+
 const items = [
   'Air mattress',
   'Banana bread',
@@ -72,56 +72,83 @@ const FuzzyDecorator: React.FC<{ string: string; atIndexes: number[] }> = ({
         if (atIndexes[indexesIndex] !== i) return char
 
         ++indexesIndex
-        return <strong>{char}</strong>
+        return <strong key={i}>{char}</strong>
       })}
     </>
   )
 }
 
-const ListSection: React.FC<{ title: string; items: string[] }> = ({
-  title,
-  items,
-}) => {
-  const search = useContext(SearchContext)
-  const foundItems = fuzzy({
+const getItems = (items: string[], search: string) =>
+  fuzzy({
     haystack: items.sort(alphabeticAscending),
     needle: search,
   })
+const ListSection: React.FC<{ title: string; items: FuzzyResult[] }> = ({
+  title,
+  items,
+}) => {
+  const foundItems = items
+
+  if (!foundItems.length) return null
 
   return (
     <>
       <h3>{title}</h3>
-      {foundItems.length ? (
-        <ul>
-          {foundItems.map(({ item, match }) => (
-            <li key={item}>
-              <FuzzyDecorator string={item} atIndexes={match.indexes} />
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No matches :(</p>
-      )}
+      <ul>
+        {foundItems.map(({ item, match }) => (
+          <li key={item}>
+            <FuzzyDecorator string={item} atIndexes={match.indexes} />
+          </li>
+        ))}
+      </ul>
     </>
   )
+}
+
+const NoResults = () => <div className="note">😞 No results</div>
+
+const Stack = ({ children }: { children: ReactNode }) => {
+  return <div className="stack">{children}</div>
 }
 
 function App() {
   const [search, setSearch] = useState('')
 
+  const filteredItems = getItems(items, search)
+  const filteredServices = getItems(services, search)
+  const filteredRecommendations = getItems(recommendations, search)
+
+  const noResults = ![
+    ...filteredItems,
+    ...filteredServices,
+    ...filteredRecommendations,
+  ].length
+
   return (
     <SearchContext.Provider value={search}>
-      <h1>lyonslist</h1>
-      <input
-        type="search"
-        placeholder="Search"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
-
-      <ListSection title="Items" items={items} />
-      <ListSection title="Skills and Services" items={services} />
-      <ListSection title="Recommendations" items={recommendations} />
+      <Stack>
+        <h1>lyonslist</h1>
+        <div>
+          <input
+            type="search"
+            placeholder="Search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+        {noResults ? (
+          <NoResults />
+        ) : (
+          <>
+            <ListSection title="Items" items={filteredItems} />
+            <ListSection title="Skills and Services" items={filteredServices} />
+            <ListSection
+              title="Recommendations"
+              items={filteredRecommendations}
+            />
+          </>
+        )}
+      </Stack>
     </SearchContext.Provider>
   )
 }

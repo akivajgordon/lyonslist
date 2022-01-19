@@ -63,6 +63,11 @@ const bestMatch =
     }
   }
 
+export interface FuzzyResult {
+  item: string
+  match: { indexes: number[] }
+}
+
 export default ({
   haystack,
   needle,
@@ -71,7 +76,7 @@ export default ({
   haystack: string[]
   needle: string
   getSearchTerms?(s: string): string[]
-}) =>
+}): FuzzyResult[] =>
   (needle || '').length
     ? haystack
         .map(bestMatch(needle, getSearchTerms))
