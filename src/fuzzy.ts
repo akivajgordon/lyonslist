@@ -29,8 +29,8 @@ const indexScore = (needle: string, match: string) => {
 }
 
 const bestMatch =
-  (needle: string, getSearchTerms: (s: string) => string[]) =>
-  (candidate: string) => {
+  <T>(needle: string, getSearchTerms: (s: T) => string[]) =>
+  (candidate: T) => {
     const { minScore, index } = getSearchTerms(candidate)
       .map((term) =>
         hasEveryCharacterInOrder(needle)(term)
@@ -63,20 +63,20 @@ const bestMatch =
     }
   }
 
-export interface FuzzyResult {
-  item: string
+export interface FuzzyResult<T> {
+  item: T
   match: { indexes: number[] }
 }
 
-export default ({
+export default <T>({
   haystack,
   needle,
-  getSearchTerms = (x) => [x],
+  getSearchTerms,
 }: {
-  haystack: string[]
+  haystack: T[]
   needle: string
-  getSearchTerms?(s: string): string[]
-}): FuzzyResult[] =>
+  getSearchTerms(o: T): string[]
+}): FuzzyResult<T>[] =>
   (needle || '').length
     ? haystack
         .map(bestMatch(needle, getSearchTerms))

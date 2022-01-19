@@ -33,4 +33,13 @@ code {
   .note {
     --light: 100%;
   }
+
+  .category {
+    --light: 100%;
+  }
+}
+
+.category {
+  --light: 0%;
+  color: hsla(0, 0%, var(--light, 0%), 0.5);
 }

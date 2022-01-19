@@ -1,60 +1,6 @@
 import React, { useState, createContext, ReactNode } from 'react'
 import fuzzy, { FuzzyResult } from './fuzzy'
-
-const items = [
-  'Air mattress',
-  'Banana bread',
-  'Barley',
-  'Booster seat',
-  'Brandy',
-  'Cheesecake',
-  'Chicken soup net bags',
-  'Child water bottle',
-  'Cooler bag',
-  'Ethernet cable',
-  'Fax machine',
-  'Flour (all-purpose and bread)',
-  'Garlic powder',
-  'Halloween candy',
-  'Hand truck',
-  'Impact driver',
-  'JKHA Handbook',
-  'Kettle',
-  'Monkey wrench',
-  'Non-dairy (soy) milk',
-  'Olive oil',
-  'Pack n play',
-  'Pareve chocolate chips',
-  'Pipe wrench',
-  'Power cord for old-school Norelco shaver',
-  'Printer',
-  'Referee shirt',
-  'Ricotta cheese',
-  'Rosemary',
-  'Sidewalk chalk',
-  'Slim fit car seats',
-  'Socket wrench set',
-  'Star tool that comes with a Ring',
-  'Toothpicks',
-  'Umbrella stroller',
-  'Vegatable oil',
-  'Yeast',
-]
-
-const services = [
-  'Notary public',
-  'Willingness to pilot test a survey for people with kids ages 6-10 who attend day camp',
-]
-
-const recommendations = [
-  'Dentist',
-  'Electrician',
-  'Key copy',
-  'Land survey company',
-  'Pediatrician',
-  'Plumber',
-  'Printer',
-]
+import { items, services, recommendations, Item, categories } from './data'
 
 const alphabeticAscending = (item: string, other: string) =>
   item.toLowerCase().localeCompare(other.toLowerCase())
@@ -78,15 +24,31 @@ const FuzzyDecorator: React.FC<{ string: string; atIndexes: number[] }> = ({
   )
 }
 
-const getItems = (items: string[], search: string) =>
+const getItems = (items: typeof services, search: string) =>
   fuzzy({
-    haystack: items.sort(alphabeticAscending),
+    haystack: items.sort((a, b) => alphabeticAscending(a.label, b.label)),
     needle: search,
+    getSearchTerms: (item) => [item.label],
   })
-const ListSection: React.FC<{ title: string; items: FuzzyResult[] }> = ({
-  title,
-  items,
-}) => {
+
+const CategoriesList = ({ item }: { item: Item }) => {
+  const categoriesLabels = item.categories.map((c) => categories[c].label)
+
+  return (
+    <>
+      {categoriesLabels.map((label) => (
+        <span className="category" key={label}>
+          #{label}
+        </span>
+      ))}
+    </>
+  )
+}
+
+const ListSection: React.FC<{
+  title: string
+  items: FuzzyResult<typeof services[0]>[]
+}> = ({ title, items }) => {
   const foundItems = items
 
   if (!foundItems.length) return null
@@ -96,8 +58,10 @@ const ListSection: React.FC<{ title: string; items: FuzzyResult[] }> = ({
       <h3>{title}</h3>
       <ul>
         {foundItems.map(({ item, match }) => (
-          <li key={item}>
-            <FuzzyDecorator string={item} atIndexes={match.indexes} />
+          <li key={item.label}>
+            <FuzzyDecorator string={item.label} atIndexes={match.indexes} />
+            &nbsp;
+            <CategoriesList item={item} />
           </li>
         ))}
       </ul>
