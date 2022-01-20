@@ -49,6 +49,7 @@ const services = [
 const recommendations = [
   'Dentist',
   'Electrician',
+  'HVAC company',
   'Key copy',
   'Land survey company',
   'Pediatrician',
