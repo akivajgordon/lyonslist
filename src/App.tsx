@@ -24,12 +24,17 @@ const FuzzyDecorator: React.FC<{ string: string; atIndexes: number[] }> = ({
   )
 }
 
-const getItems = (items: typeof services, search: string) =>
-  fuzzy({
+const getItems = (items: typeof services, search: string) => {
+  const isCategorySearch = search.startsWith('#')
+  return fuzzy({
     haystack: items.sort((a, b) => alphabeticAscending(a.label, b.label)),
-    needle: search,
-    getSearchTerms: (item) => [item.label],
+    needle: isCategorySearch ? search.slice(1) : search,
+    getSearchTerms: (item) =>
+      isCategorySearch
+        ? item.categories.map((c) => categories[c].label)
+        : [item.label],
   })
+}
 
 const CategoriesList = ({ item }: { item: Item }) => {
   const categoriesLabels = item.categories.map((c) => categories[c].label)
@@ -37,9 +42,12 @@ const CategoriesList = ({ item }: { item: Item }) => {
   return (
     <>
       {categoriesLabels.map((label) => (
-        <span className="category" key={label}>
-          #{label}
-        </span>
+        <>
+          <span className="category" key={label}>
+            #{label}
+          </span>
+          &nbsp;
+        </>
       ))}
     </>
   )

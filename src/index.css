@@ -29,6 +29,11 @@ code {
   background-color: hsla(0, 0%, var(--light, 0%), 0.1);
 }
 
+.category {
+  --light: 0%;
+  color: hsla(0, 0%, var(--light, 0%), 0.5);
+}
+
 @media (prefers-color-scheme: dark) {
   .note {
     --light: 100%;
@@ -37,9 +42,4 @@ code {
   .category {
     --light: 100%;
   }
-}
-
-.category {
-  --light: 0%;
-  color: hsla(0, 0%, var(--light, 0%), 0.5);
 }

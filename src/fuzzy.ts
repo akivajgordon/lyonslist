@@ -1,5 +1,16 @@
-const hasEveryCharacterInOrder = (needle: string) => (item: string) =>
-  new RegExp(needle.split('').join('.*'), 'i').test(item)
+const escapeRegex = (string: string) => {
+  return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
+}
+
+const hasEveryCharacterInOrder = (needle: string) => (item: string) => {
+  const chars = needle.toLowerCase().split('')
+  let j = 0
+  for (let i = 0; i < item.toLowerCase().length && j < chars.length; ++i) {
+    if (chars[j] === item.toLowerCase()[i]) ++j
+  }
+
+  return j === chars.length
+}
 
 const matchIndexes = (needle: string, match: string) => {
   const needleChars = needle.split('')
