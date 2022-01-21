@@ -76,7 +76,7 @@ const bestMatch =
 
 export interface FuzzyResult<T> {
   item: T
-  match: { indexes: number[] }
+  match: { index: number; indexes: number[] }
 }
 
 export default <T>({
@@ -104,4 +104,4 @@ export default <T>({
 
           return scoreDiff
         })
-    : haystack.map((s) => ({ item: s, match: { indexes: [-1] } }))
+    : haystack.map((s) => ({ item: s, match: { index: -1, indexes: [-1] } }))

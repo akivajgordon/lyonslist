@@ -1,4 +1,4 @@
-import React, { useState, createContext, ReactNode } from 'react'
+import React, { useState, createContext, ReactNode, useContext } from 'react'
 import fuzzy, { FuzzyResult } from './fuzzy'
 import { items, services, recommendations, Item, categories } from './data'
 
@@ -24,31 +24,52 @@ const FuzzyDecorator: React.FC<{ string: string; atIndexes: number[] }> = ({
   )
 }
 
+const getSearchTerms = (isCategorySearch: boolean) => (item: Item) =>
+  isCategorySearch
+    ? item.categories.map((c) => categories[c].label)
+    : [item.label]
+
 const getItems = (items: typeof services, search: string) => {
   const isCategorySearch = search.startsWith('#')
   return fuzzy({
     haystack: items.sort((a, b) => alphabeticAscending(a.label, b.label)),
     needle: isCategorySearch ? search.slice(1) : search,
-    getSearchTerms: (item) =>
-      isCategorySearch
-        ? item.categories.map((c) => categories[c].label)
-        : [item.label],
+    getSearchTerms: getSearchTerms(isCategorySearch),
   })
 }
 
-const CategoriesList = ({ item }: { item: Item }) => {
+const CategoriesList = ({
+  item,
+  fuzziness,
+}: {
+  item: Item
+  fuzziness: {
+    match: { index: number; indexes: number[] }
+    isCategorySearch: boolean
+  }
+}) => {
   const categoriesLabels = item.categories.map((c) => categories[c].label)
 
   return (
     <>
-      {categoriesLabels.map((label) => (
-        <>
-          <span className="category" key={label}>
-            #{label}
-          </span>
-          &nbsp;
-        </>
-      ))}
+      {categoriesLabels.map((label, i) => {
+        return (
+          <>
+            <span className="category" key={label}>
+              #
+              {fuzziness.isCategorySearch && i === fuzziness.match.index ? (
+                <FuzzyDecorator
+                  string={label}
+                  atIndexes={fuzziness.match.indexes}
+                />
+              ) : (
+                label
+              )}
+            </span>
+            &nbsp;
+          </>
+        )
+      })}
     </>
   )
 }
@@ -57,6 +78,8 @@ const ListSection: React.FC<{
   title: string
   items: FuzzyResult<typeof services[0]>[]
 }> = ({ title, items }) => {
+  const search = useContext(SearchContext)
+  const isCategorySearch = search.startsWith('#')
   const foundItems = items
 
   if (!foundItems.length) return null
@@ -65,13 +88,25 @@ const ListSection: React.FC<{
     <>
       <h3>{title}</h3>
       <ul>
-        {foundItems.map(({ item, match }) => (
-          <li key={item.label}>
-            <FuzzyDecorator string={item.label} atIndexes={match.indexes} />
-            &nbsp;
-            <CategoriesList item={item} />
-          </li>
-        ))}
+        {foundItems.map(({ item, match }) => {
+          console.log(match.index)
+          const searchTerms = getSearchTerms(isCategorySearch)(item)
+
+          return (
+            <li key={item.label}>
+              {isCategorySearch ? (
+                item.label
+              ) : (
+                <FuzzyDecorator string={item.label} atIndexes={match.indexes} />
+              )}
+              &nbsp;
+              <CategoriesList
+                item={item}
+                fuzziness={{ match, isCategorySearch }}
+              />
+            </li>
+          )
+        })}
       </ul>
     </>
   )
@@ -107,6 +142,9 @@ function App() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
+          <p className="typography muted">
+            Tip: start with <code>#</code> to filter by category.
+          </p>
         </div>
         {noResults ? (
           <NoResults />
