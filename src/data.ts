@@ -74,6 +74,7 @@ export const services: Item[] = [
 export const recommendations: Item[] = [
   { label: 'Dentist', categories: [] },
   { label: 'Electrician', categories: [] },
+  { label: 'HVAC company', categories: [] },
   { label: 'Key copy', categories: [] },
   { label: 'Land survey company', categories: [] },
   { label: 'Pediatrician', categories: [] },
