@@ -37,6 +37,7 @@ export const items: Item[] = [
   { label: 'Hand truck', categories: [] },
   { label: 'Impact driver', categories: [Category.TOOLS] },
   { label: 'JKHA Handbook', categories: [] },
+  { label: 'Jumper cables', categories: [Category.TOOLS] },
   { label: 'Kettle', categories: [] },
   { label: 'Monkey wrench', categories: [Category.TOOLS] },
   { label: 'Non-dairy (soy) milk', categories: [Category.FOOD] },
@@ -49,6 +50,7 @@ export const items: Item[] = [
     categories: [Category.ELECTRONICS],
   },
   { label: 'Printer', categories: [Category.ELECTRONICS] },
+  { label: 'Red wig', categories: [] },
   { label: 'Referee shirt', categories: [] },
   { label: 'Ricotta cheese', categories: [Category.FOOD] },
   { label: 'Rosemary', categories: [Category.FOOD] },
@@ -73,11 +75,14 @@ export const services: Item[] = [
 
 export const recommendations: Item[] = [
   { label: 'Dentist', categories: [] },
+  { label: 'Dermatologist', categories: [] },
   { label: 'Electrician', categories: [] },
   { label: 'HVAC company', categories: [] },
   { label: 'Key copy', categories: [] },
   { label: 'Land survey company', categories: [] },
+  { label: 'Ophthalmologist', categories: [] },
   { label: 'Pediatrician', categories: [] },
+  { label: 'PCR testing locations', categories: [] },
   { label: 'Plumber', categories: [] },
   { label: 'Printer', categories: [] },
 ]
