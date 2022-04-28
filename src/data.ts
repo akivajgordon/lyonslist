@@ -74,6 +74,7 @@ export const services: Item[] = [
 ]
 
 export const recommendations: Item[] = [
+  { label: 'Auto repair shop', categories: [] },
   { label: 'Dentist', categories: [] },
   { label: 'Dermatologist', categories: [] },
   { label: 'Electrician', categories: [] },
