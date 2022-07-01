@@ -23,6 +23,7 @@ export const items: Item[] = [
   { label: 'Air mattress', categories: [Category.KIDS] },
   { label: 'Banana bread', categories: [Category.FOOD] },
   { label: 'Barley', categories: [Category.FOOD] },
+  { label: 'Batteries', categories: [Category.ELECTRONICS] },
   { label: 'Booster seat', categories: [Category.KIDS, Category.CAR] },
   { label: 'Brandy', categories: [Category.FOOD] },
   { label: 'Cheesecake', categories: [Category.FOOD] },
