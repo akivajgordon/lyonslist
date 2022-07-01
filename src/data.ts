@@ -40,6 +40,7 @@ export const items: Item[] = [
   { label: 'JKHA Handbook', categories: [] },
   { label: 'Jumper cables', categories: [Category.TOOLS] },
   { label: 'Kettle', categories: [] },
+  { label: 'Knee scooter', categories: [Category.TOOLS] },
   { label: 'Monkey wrench', categories: [Category.TOOLS] },
   { label: 'Non-dairy (soy) milk', categories: [Category.FOOD] },
   { label: 'Olive oil', categories: [Category.FOOD] },
