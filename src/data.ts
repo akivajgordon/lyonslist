@@ -56,6 +56,8 @@ export const items: Item[] = [
   { label: 'Referee shirt', categories: [] },
   { label: 'Ricotta cheese', categories: [Category.FOOD] },
   { label: 'Rosemary', categories: [Category.FOOD] },
+  { label: 'SD card', categories: [Category.ELECTRONICS] },
+  { label: 'SD card adapter', categories: [Category.ELECTRONICS] },
   { label: 'Sidewalk chalk', categories: [Category.KIDS] },
   { label: 'Slim fit car seats', categories: [Category.KIDS, Category.CAR] },
   { label: 'Socket wrench set', categories: [Category.TOOLS] },
