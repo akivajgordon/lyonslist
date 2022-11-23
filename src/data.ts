@@ -61,6 +61,7 @@ export const items: Item[] = [
   { label: 'Sidewalk chalk', categories: [Category.KIDS] },
   { label: 'SIM card adapter', categories: [Category.ELECTRONICS] },
   { label: 'Slim fit car seats', categories: [Category.KIDS, Category.CAR] },
+  { label: 'Smart Balance', categories: [Category.FOOD] },
   { label: 'Socket wrench set', categories: [Category.TOOLS] },
   { label: 'Star tool that comes with a Ring', categories: [Category.TOOLS] },
   { label: 'Toothpicks', categories: [Category.FOOD] },
